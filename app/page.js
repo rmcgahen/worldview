@@ -181,7 +181,6 @@ The Global <span className="text-orange-500">Record</span>            </h1>
         <div className="max-w-6xl mx-auto flex gap-6">
           {[
             { id: "feed", label: "📰 News Feed" },
-            { id: "monetize", label: "💰 Revenue Tracker" },
           ].map(t => (
             <button
               key={t.id}
@@ -206,11 +205,19 @@ The Global <span className="text-orange-500">Record</span>            </h1>
               )}
 
               {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl h-80 animate-pulse" />
-                  ))}
-                </div>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => (
+      <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl h-80 animate-pulse">
+        <div className="h-48 bg-zinc-800 rounded-t-2xl" />
+        <div className="p-5 space-y-3">
+          <div className="h-3 bg-zinc-800 rounded w-1/3" />
+          <div className="h-5 bg-zinc-800 rounded w-full" />
+          <div className="h-5 bg-zinc-800 rounded w-4/5" />
+          <div className="h-16 bg-zinc-800 rounded" />
+        </div>
+      </div>
+    ))}
+  </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
   {stories.map((story, i) => (
@@ -242,49 +249,7 @@ The Global <span className="text-orange-500">Record</span>            </h1>
           </div>
         )}
 
-        {tab === "monetize" && (
-          <div className="max-w-3xl mx-auto space-y-6" style={{ fontFamily: "sans-serif" }}>
-            <h2 className="text-2xl font-bold text-white">💰 Revenue Tracker</h2>
-            <p className="text-zinc-400 text-sm">Track your growth toward monetization milestones.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { label: "Monthly Visitors", current: "0", goal: "10,000", milestone: "AdSense approval", pct: 0 },
-                { label: "Email Subscribers", current: "0", goal: "5,000", milestone: "First sponsorship", pct: 0 },
-                { label: "Stories Published", current: "0", goal: "100", milestone: "SEO traction", pct: 0 },
-              ].map(item => (
-                <div key={item.label} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5">
-                  <div className="text-zinc-400 text-xs uppercase tracking-widest mb-1">{item.label}</div>
-                  <div className="text-white font-bold text-2xl mb-1">{item.current}</div>
-                  <div className="w-full bg-zinc-800 rounded-full h-2 mb-2">
-                    <div className="bg-orange-500 h-2 rounded-full" style={{ width: `${item.pct}%` }} />
-                  </div>
-                  <div className="text-zinc-500 text-xs">Goal: {item.goal}</div>
-                  <div className="text-orange-400 text-xs mt-1">🎯 {item.milestone}</div>
-                </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { icon: "📺", name: "Google AdSense", status: "Not applied", requirement: "10K monthly visitors", rpm: "$1–3 RPM" },
-                { icon: "🏆", name: "Mediavine", status: "Not eligible", requirement: "50K monthly sessions", rpm: "$15–40 RPM" },
-                { icon: "📧", name: "Newsletter Sponsorship", status: "Not started", requirement: "5K subscribers", rpm: "$500–2K/send" },
-                { icon: "🔗", name: "Affiliate Links", status: "Ready now", requirement: "No minimum", rpm: "20–40% commission" },
-              ].map(item => (
-                <div key={item.name} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex gap-4 items-start">
-                  <span className="text-2xl">{item.icon}</span>
-                  <div>
-                    <div className="text-white font-bold text-sm">{item.name}</div>
-                    <div className="text-green-400 text-xs font-semibold">{item.rpm}</div>
-                    <div className="text-zinc-500 text-xs mt-1">{item.requirement}</div>
-                    <div className={`text-xs mt-1 font-semibold ${item.status === "Ready now" ? "text-green-400" : "text-zinc-500"}`}>
-                      {item.status === "Ready now" ? "✅" : "⏳"} {item.status}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
       </main>
 
       {/* Footer Ad */}
