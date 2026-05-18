@@ -1,0 +1,299 @@
+# WorldView — Windows Setup Guide
+# Follow every step in order. Each step builds on the last.
+# Takes about 2-3 hours total your first time.
+
+═══════════════════════════════════════════════════════════
+PART 1 — INSTALL YOUR TOOLS (do this once, ever)
+═══════════════════════════════════════════════════════════
+
+STEP 1: Install Node.js
+───────────────────────
+1. Open your web browser and go to: https://nodejs.org
+2. Click the big green button that says "LTS" (Long Term Support)
+3. Run the downloaded installer (.msi file)
+4. Click Next → Next → Next → Install (all defaults are fine)
+5. Click Finish
+
+   VERIFY IT WORKED:
+   - Press Windows key + R on your keyboard
+   - Type: cmd  → press Enter (this opens Command Prompt)
+   - Type: node --version  → press Enter
+   - You should see something like: v20.11.0
+   - If you see that, Node.js is installed ✓
+
+STEP 2: Install VS Code (your code editor)
+──────────────────────────────────────────
+1. Go to: https://code.visualstudio.com
+2. Click "Download for Windows"
+3. Run the installer
+4. On the install options screen, CHECK these boxes:
+   ✓ Add "Open with Code" to Windows Explorer file context menu
+   ✓ Add "Open with Code" to Windows Explorer directory context menu
+   ✓ Register Code as an editor for supported file types
+   ✓ Add to PATH
+5. Click Install → Finish
+
+STEP 3: Install Git
+───────────────────
+1. Go to: https://git-scm.com
+2. Click "Download for Windows"
+3. Run the installer → click Next through everything (all defaults are fine)
+4. VERIFY: Open a new Command Prompt and type: git --version
+   You should see: git version 2.x.x ✓
+
+
+═══════════════════════════════════════════════════════════
+PART 2 — SET UP YOUR PROJECT
+═══════════════════════════════════════════════════════════
+
+STEP 4: Put the project files in place
+────────────────────────────────────────
+1. Create a folder on your Desktop called: worldview
+2. Copy ALL the files from the ZIP you downloaded into that folder
+   Your folder should look like this:
+   
+   worldview/
+   ├── app/
+   │   ├── api/
+   │   │   ├── news/
+   │   │   │   └── route.js
+   │   │   └── localize/
+   │   │       └── route.js
+   │   ├── globals.css
+   │   ├── layout.js
+   │   └── page.js
+   ├── .env.local
+   ├── .gitignore
+   ├── next.config.js
+   ├── package.json
+   ├── postcss.config.js
+   └── tailwind.config.js
+
+STEP 5: Open the project in VS Code
+─────────────────────────────────────
+1. Right-click the worldview folder on your Desktop
+2. Select "Open with Code"
+3. VS Code opens with your project
+
+STEP 6: Get your API keys
+──────────────────────────
+
+   GET YOUR ANTHROPIC KEY:
+   1. Go to: https://console.anthropic.com
+   2. Sign up for a free account
+   3. In the left sidebar, click "API Keys"
+   4. Click "Create Key" → give it a name like "worldview"
+   5. COPY the key (starts with sk-ant-...)
+   6. NOTE: You may need to add a small amount of credit ($5)
+      to actually use the API. Go to "Billing" to do this.
+
+   GET YOUR NEWSAPI KEY:
+   1. Go to: https://newsapi.org
+   2. Click "Get API Key" in the top right
+   3. Fill out the free registration form
+   4. Your key appears on the dashboard — COPY it
+
+STEP 7: Add your keys to the project
+──────────────────────────────────────
+1. In VS Code, find the file called: .env.local
+   (it's in the root of your worldview folder)
+2. Click to open it
+3. Replace the placeholder text with your real keys:
+   
+   BEFORE:
+   ANTHROPIC_API_KEY=paste_your_anthropic_key_here
+   NEWS_API_KEY=paste_your_newsapi_key_here
+   
+   AFTER (example):
+   ANTHROPIC_API_KEY=sk-ant-api03-abc123...
+   NEWS_API_KEY=a1b2c3d4e5f6...
+
+4. Press Ctrl+S to save the file
+
+   ⚠️  IMPORTANT: Never share .env.local with anyone.
+   Never upload it anywhere. Your .gitignore file already
+   prevents it from going to GitHub automatically.
+
+STEP 8: Install project dependencies
+──────────────────────────────────────
+1. In VS Code, open the Terminal:
+   - Click: Terminal (top menu) → New Terminal
+   - A panel opens at the bottom of VS Code
+
+2. Make sure you're in the right folder. Type:
+   cd Desktop\worldview
+   (If you're already there, skip this)
+
+3. Type this command and press Enter:
+   npm install
+
+4. Wait for it to finish (1-3 minutes, you'll see lots of text)
+   When it's done, you'll see your cursor again.
+
+
+═══════════════════════════════════════════════════════════
+PART 3 — TEST YOUR SITE LOCALLY
+═══════════════════════════════════════════════════════════
+
+STEP 9: Start the development server
+──────────────────────────────────────
+1. In the VS Code Terminal, type:
+   npm run dev
+   
+2. Press Enter and wait about 20 seconds
+
+3. You'll see something like:
+   ▲ Next.js 14.2.3
+   - Local: http://localhost:3000
+   
+4. Open your browser and go to: http://localhost:3000
+
+5. You should see the WorldView website! 🎉
+
+   If you see stories but they say "Demo Mode" in yellow —
+   that's fine! It means your NewsAPI key isn't set yet
+   or you need to restart the server after adding keys.
+
+   TO RESTART: In the Terminal, press Ctrl+C to stop,
+   then type npm run dev again.
+
+STEP 10: Test the localization
+───────────────────────────────
+1. On the site, click any story card
+2. Click the orange "Make It Make Sense for Americans" button
+3. Claude should rewrite the story with US context
+
+   If it shows "Add your Anthropic API key" instead:
+   - Double-check your .env.local has the correct key
+   - Stop and restart the server (Ctrl+C, then npm run dev)
+
+
+═══════════════════════════════════════════════════════════
+PART 4 — PUT IT ON THE INTERNET
+═══════════════════════════════════════════════════════════
+
+STEP 11: Create a GitHub account
+──────────────────────────────────
+1. Go to: https://github.com
+2. Click "Sign up" → create a free account
+3. Verify your email
+
+STEP 12: Create a GitHub repository
+─────────────────────────────────────
+1. On GitHub, click the "+" icon (top right) → "New repository"
+2. Repository name: worldview
+3. Set to: Private (keeps your code private for now)
+4. Click "Create repository"
+5. Leave this page open — you'll need it in the next step
+
+STEP 13: Upload your code to GitHub
+─────────────────────────────────────
+In VS Code Terminal (make sure npm run dev is stopped first — press Ctrl+C):
+
+Type these commands ONE AT A TIME, pressing Enter after each:
+
+   git init
+   git add .
+   git commit -m "Initial WorldView launch"
+
+Now go back to your GitHub repository page.
+Copy the two lines under "push an existing repository from the command line"
+They look like:
+
+   git remote add origin https://github.com/YOURUSERNAME/worldview.git
+   git branch -M main
+   git push -u origin main
+
+Paste and run each of those lines in your Terminal.
+GitHub may ask you to log in — use your GitHub username and password.
+
+When done, refresh your GitHub page and you'll see all your files there ✓
+
+STEP 14: Deploy to Vercel (makes it live on the internet)
+──────────────────────────────────────────────────────────
+1. Go to: https://vercel.com
+2. Click "Sign Up" → choose "Continue with GitHub"
+3. Authorize Vercel to access GitHub
+
+4. Click "Add New..." → "Project"
+5. Find your "worldview" repository → click "Import"
+6. Don't change any settings — just click "Deploy"
+7. Wait 2-3 minutes while Vercel builds your site
+
+8. ADD YOUR SECRET KEYS TO VERCEL:
+   - In Vercel dashboard → click your project
+   - Click "Settings" (top menu)
+   - Click "Environment Variables" (left sidebar)
+   - Add the first variable:
+     Name:  ANTHROPIC_API_KEY
+     Value: [paste your Anthropic key]
+     Click "Save"
+   - Add the second variable:
+     Name:  NEWS_API_KEY
+     Value: [paste your NewsAPI key]
+     Click "Save"
+
+9. Redeploy with your keys:
+   - Click "Deployments" in the top menu
+   - Click the three dots (...) next to the latest deployment
+   - Click "Redeploy" → "Redeploy"
+
+10. Your site is now LIVE at: https://worldview-YOURNAME.vercel.app 🚀
+
+STEP 15 (Optional): Add a custom domain
+─────────────────────────────────────────
+1. Buy a domain at: https://namecheap.com
+   Search for something like worldviewnews.com (~$12/year)
+   
+2. In Vercel → Settings → Domains
+3. Type your domain name → click "Add"
+4. Vercel shows you DNS records to copy
+5. Go to Namecheap → manage your domain → Advanced DNS
+6. Add the records Vercel gave you
+7. Wait 10-30 minutes for it to go live
+
+
+═══════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════
+
+Problem: "npm is not recognized"
+Solution: Restart your computer after installing Node.js
+
+Problem: Site shows but no stories load
+Solution: Check that your NewsAPI key is correct in .env.local
+          Free NewsAPI keys only work on localhost (not deployed)
+          Upgrade to NewsAPI paid plan ($449/mo) OR use the
+          free RSS feeds approach instead (ask for help with this)
+
+Problem: Localization button does nothing
+Solution: Check your Anthropic API key in .env.local
+          Make sure you have billing enabled at console.anthropic.com
+
+Problem: Vercel deploy fails
+Solution: Check the "Build Logs" in Vercel for the error message
+          Most common fix: make sure all files are saved and pushed to GitHub
+
+Problem: "Module not found" error
+Solution: Run: npm install    in your Terminal
+
+
+═══════════════════════════════════════════════════════════
+YOU'RE DONE! NEXT STEPS
+═══════════════════════════════════════════════════════════
+
+1. Apply for Google AdSense: https://google.com/adsense
+   (Replace the ad placeholder divs with your AdSense code)
+
+2. Set up your newsletter: https://beehiiv.com
+   (Connect it to the Subscribe button)
+
+3. Start posting daily on Twitter/Threads and Reddit
+
+4. Come back and ask for help adding:
+   - Automatic hourly RSS refresh
+   - Beehiiv newsletter integration  
+   - Google Analytics tracking
+   - SEO optimization
+
+Good luck! 🌍

@@ -1,0 +1,157 @@
+===========================================
+  WORLDVIEW — WINDOWS SETUP INSTRUCTIONS
+  Read this top to bottom, step by step.
+===========================================
+
+BEFORE YOU START — Install 3 free programs
+-------------------------------------------
+1. Node.js
+   → Go to: https://nodejs.org
+   → Click the big green "LTS" button to download
+   → Run the installer, click Next on everything
+
+2. VS Code (your code editor)
+   → Go to: https://code.visualstudio.com
+   → Download for Windows, run the installer
+
+3. Git
+   → Go to: https://git-scm.com/download/win
+   → Download and install, click Next on everything
+
+
+STEP 1 — Open the project in VS Code
+--------------------------------------
+1. Copy the "worldview" folder to your Desktop
+2. Open VS Code
+3. Click File → Open Folder → select the "worldview" folder on your Desktop
+4. You should see files listed on the left side
+
+
+STEP 2 — Open the Terminal inside VS Code
+------------------------------------------
+1. In VS Code, click "Terminal" in the top menu
+2. Click "New Terminal"
+3. A black panel appears at the bottom — this is your terminal
+
+
+STEP 3 — Install project dependencies
+---------------------------------------
+In the terminal, type this exactly and press Enter:
+
+   npm install
+
+Wait for it to finish (may take 1-2 minutes). You'll see a lot of text scroll by — that's normal.
+
+
+STEP 4 — Add your API keys
+----------------------------
+1. In VS Code's left panel, find the file called ".env.local.example"
+2. Right-click it → click "Rename" → rename it to: .env.local
+   (remove the word "example" — just .env.local)
+3. Click on .env.local to open it
+4. Get your Anthropic key:
+   → Go to: https://console.anthropic.com
+   → Sign in or create a free account
+   → Click "API Keys" on the left
+   → Click "Create Key" and copy it
+   → Paste it after ANTHROPIC_API_KEY= (no spaces)
+5. Get your NewsAPI key:
+   → Go to: https://newsapi.org
+   → Click "Get API Key" and create a free account
+   → Copy your key from the dashboard
+   → Paste it after NEWS_API_KEY= (no spaces)
+6. Save the file (Ctrl+S)
+
+Your .env.local should look like:
+   ANTHROPIC_API_KEY=sk-ant-api03-abc123...
+   NEWS_API_KEY=a1b2c3d4e5f6...
+
+
+STEP 5 — Run your site locally
+--------------------------------
+In the terminal, type this and press Enter:
+
+   npm run dev
+
+You'll see: "ready - started server on http://localhost:3000"
+
+Open your web browser and go to:
+   http://localhost:3000
+
+You should see your WorldView website! 🎉
+
+To stop the site: press Ctrl+C in the terminal.
+
+
+STEP 6 — Put your code on GitHub
+----------------------------------
+1. Go to https://github.com and create a free account
+2. Click the "+" icon (top right) → "New repository"
+3. Name it: worldview
+4. Click "Create repository" (leave everything else as is)
+5. GitHub shows you a page with commands. Copy the URL that
+   looks like: https://github.com/YOURNAME/worldview.git
+
+6. In your VS Code terminal, run these commands ONE AT A TIME:
+
+   git init
+   git add .
+   git commit -m "Launch WorldView"
+   git remote add origin https://github.com/YOURNAME/worldview.git
+   git branch -M main
+   git push -u origin main
+
+   (Replace YOURNAME with your actual GitHub username)
+
+7. Refresh GitHub — you should see all your files there!
+
+
+STEP 7 — Deploy live on Vercel (free)
+---------------------------------------
+1. Go to https://vercel.com
+2. Click "Sign Up" → choose "Continue with GitHub"
+3. Click "Add New Project"
+4. Find "worldview" in the list → click "Import"
+5. Click "Deploy" — wait about 60 seconds
+
+6. ADD YOUR API KEYS TO VERCEL:
+   → In Vercel, go to your project → Settings → Environment Variables
+   → Add: ANTHROPIC_API_KEY = (paste your Anthropic key)
+   → Add: NEWS_API_KEY = (paste your NewsAPI key)
+   → Click Save
+
+7. Go to Deployments → click the three dots → "Redeploy"
+
+8. Your site is now LIVE at:
+   https://worldview-YOURNAME.vercel.app  🚀
+
+
+OPTIONAL — Add a custom domain (~$12/year)
+--------------------------------------------
+1. Buy a domain at https://namecheap.com
+   (search for something like worldviewnews.com)
+2. In Vercel → Settings → Domains → type your domain → Add
+3. Vercel shows DNS records — copy them into Namecheap's DNS settings
+4. Wait 10-30 minutes → your site is live on your own domain!
+
+
+NEED HELP?
+-----------
+If anything goes wrong, the most common fixes:
+
+"npm install" fails
+→ Make sure Node.js is installed. Close and reopen VS Code.
+
+Site loads but shows "Could not fetch live news"
+→ Double-check your .env.local file has the right NewsAPI key
+
+"Make It Make Sense" button does nothing or errors
+→ Double-check your ANTHROPIC_API_KEY in .env.local
+
+Vercel deploy fails
+→ Make sure you added both environment variables in Vercel Settings
+
+
+===========================================
+  GOOD LUCK! YOU'VE GOT THIS.
+===========================================
