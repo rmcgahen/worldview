@@ -162,8 +162,7 @@ export default function WorldView() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div>
             <h1 style={{ letterSpacing: "-0.03em" }} className="text-3xl font-bold">
-              World<span className="text-orange-500">View</span>
-            </h1>
+The Global <span className="text-orange-500">Record</span>            </h1>
             <p className="text-zinc-500 text-xs mt-0.5 tracking-widest uppercase" style={{ fontFamily: "sans-serif" }}>
               The World — Explained for You
             </p>
@@ -293,8 +292,7 @@ export default function WorldView() {
         <div className="max-w-6xl mx-auto">
           <AdPlaceholder label="Footer Banner — Google AdSense 728×90" className="h-14 w-full mb-6" />
           <div className="flex items-center justify-between text-zinc-600 text-xs" style={{ fontFamily: "sans-serif" }}>
-            <span>WorldView © 2026 — International News for Americans</span>
-            <span>Powered by Claude AI</span>
+<span>The Global Record © 2026 — International News for Americans</span>            <span>Powered by Claude AI</span>
           </div>
         </div>
       </footer>
