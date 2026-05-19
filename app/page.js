@@ -72,7 +72,7 @@ function StoryCard({ story }) {
           </span>
         </div>
 <div className="absolute bottom-3 right-3 text-xs text-zinc-400">
-  {new Date(story.publishedAt).toLocaleString("en-US", {
+  {mounted ? new Date(story.publishedAt).toLocaleString("en-US", {
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     month: "short",
     day: "numeric",
