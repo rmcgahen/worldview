@@ -69,8 +69,12 @@ function StoryCard({ story }) {
             {story.category || "World"}
           </span>
         </div>
-        <div className="absolute bottom-3 right-3 text-xs text-zinc-400">{story.publishedAt}</div>
-      </div>
+<div className="absolute bottom-3 right-3 text-xs text-zinc-400">
+  {new Date(story.publishedAt).toLocaleDateString("en-US", {
+    month: "short", day: "numeric",
+    hour: "2-digit", minute: "2-digit",
+  })}
+</div>      </div>
 
       <div className="p-5 flex flex-col flex-1 space-y-3">
         <div className="text-xs text-orange-400 font-semibold uppercase tracking-widest">

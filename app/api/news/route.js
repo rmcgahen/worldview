@@ -73,9 +73,7 @@ export async function GET() {
         originalSummary: story.description,
         url: story.url,
         image: story.image,
-        publishedAt: new Date(story.publishedAt).toLocaleDateString("en-US", {
-          month: "short", day: "numeric",
-          hour: "2-digit", minute: "2-digit",
+publishedAt: story.publishedAt,
         }),
         countryFlag: story.flag,
         category: "World",
