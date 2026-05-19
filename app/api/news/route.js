@@ -43,46 +43,51 @@ export async function GET() {
     const feedResults = await Promise.allSettled(
       RSS_FEEDS.map(async (feed) => {
         const parsed = await parser.parseURL(feed.url);
-        return parsed.items.map(item => ({
-          title: item.title,
-          description: item.contentSnippet || item.summary || '',
-          url: item.link,
-          image: extractImage(item),
-          publishedAt: item.pubDate || item.isoDate || new Date().toISOString(),
-          source: feed.source,
-          flag: feed.flag,
-        }));
+        return parsed.items.map(function(item) {
+          return {
+            title: item.title,
+            description: item.contentSnippet || item.summary || '',
+            url: item.link,
+            image: extractImage(item),
+            publishedAt: item.pubDate || item.isoDate || new Date().toISOString(),
+            source: feed.source,
+            flag: feed.flag,
+          };
+        });
       })
     );
 
-    let allStories = [];
-    feedResults.forEach(result => {
+    var allStories = [];
+    feedResults.forEach(function(result) {
       if (result.status === 'fulfilled') {
         allStories = allStories.concat(result.value);
       }
     });
 
-    const stories = allStories
-      .filter(s => s.title && s.description && s.description.length > 30)
-      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    var stories = allStories
+      .filter(function(s) { return s.title && s.description && s.description.length > 30; })
+      .sort(function(a, b) { return new Date(b.publishedAt) - new Date(a.publishedAt); })
       .slice(0, 9)
-      .map((story, index) => ({
-        id: index + 1,
-        originalTitle: story.title,
-        source: story.source,
-        originalSummary: story.description,
-        url: story.url,
-        image: story.image,
-publishedAt: story.publishedAt,
-        }),
-        countryFlag: story.flag,
-        category: "World",
-        localized: null,
-      }));
+      .map(function(story, index) {
+        return {
+          id: index + 1,
+          originalTitle: story.title,
+          source: story.source,
+          originalSummary: story.description,
+          url: story.url,
+          image: story.image,
+          publishedAt: story.publishedAt,
+          countryFlag: story.flag,
+          category: "World",
+          localized: null,
+        };
+      });
 
-    if (stories.length === 0) throw new Error("No stories found");
+    if (stories.length === 0) {
+      throw new Error("No stories found");
+    }
 
-    return new Response(JSON.stringify({ stories }), {
+    return new Response(JSON.stringify({ stories: stories }), {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-store, no-cache, must-revalidate',
