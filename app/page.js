@@ -52,6 +52,8 @@ function AdPlaceholder({ label, className }) {
 function StoryCard({ story }) {
   const loc = story.localized;
   const isLocalizing = story.localizing;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300 group flex flex-col">
@@ -70,9 +72,13 @@ function StoryCard({ story }) {
           </span>
         </div>
 <div className="absolute bottom-3 right-3 text-xs text-zinc-400">
-  {new Date(story.publishedAt).toLocaleDateString("en-US", {
-    month: "short", day: "numeric",
-    hour: "2-digit", minute: "2-digit",
+  {new Date(story.publishedAt).toLocaleString("en-US", {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
   })}
 </div>      </div>
 
