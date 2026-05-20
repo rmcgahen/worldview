@@ -289,10 +289,14 @@ export default function GlobalRecord() {
       <footer className="border-t border-zinc-800 px-6 py-8 mt-8">
         <div className="max-w-6xl mx-auto">
           <AdPlaceholder label="Footer Banner — Google AdSense 728x90" className="h-14 w-full mb-6" />
-          <div className="flex items-center justify-between text-zinc-600 text-xs" style={{ fontFamily: "sans-serif" }}>
-            <span>The Global Record © 2026 — International News for Americans</span>
-            <span>Powered by Claude AI</span>
-          </div>
+<div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-zinc-600 text-xs" style={{ fontFamily: "sans-serif" }}>
+  <span>The Global Record © 2026 — International News for Americans</span>
+  <div className="flex gap-4">
+    <a href="/about" className="hover:text-zinc-400 transition-colors">About</a>
+    <a href="/contact" className="hover:text-zinc-400 transition-colors">Contact</a>
+    <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy Policy</a>
+  </div>
+</div>
         </div>
       </footer>
     </div>
