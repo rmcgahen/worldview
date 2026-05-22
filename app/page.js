@@ -225,8 +225,12 @@ export default function GlobalRecord() {
               The World — Explained for You
             </p>
           </div>
-          <button className="bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors" style={{ fontFamily: "sans-serif" }}>
-            Subscribe Free
+<button
+  onClick={function() { window.open('https://theglobalrecord.beehiiv.com/subscribe', '_blank'); }}
+  className="bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors"
+  style={{ fontFamily: "sans-serif" }}
+>
+  Subscribe Free
           </button>
         </div>
       </header>
@@ -274,11 +278,23 @@ export default function GlobalRecord() {
               <h3 className="text-white font-bold mb-2">📬 Daily Brief</h3>
               <p className="text-zinc-400 text-sm mb-4">The world's top stories explained for Americans — every morning.</p>
               <input
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-300 placeholder-zinc-600 mb-3 focus:outline-none focus:border-orange-500"
-                placeholder="your@email.com"
-              />
-              <button className="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 rounded-xl text-sm transition-colors">
-                Subscribe Free
+             id="sidebar-email"
+  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-300 placeholder-zinc-600 mb-3 focus:outline-none focus:border-orange-500"
+  placeholder="your@email.com"
+  type="email"
+/>
+<button
+  onClick={function() {
+    var email = document.getElementById('sidebar-email').value;
+    if (email) {
+      window.open('https://theglobalrecord.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank');
+    } else {
+      window.open('https://theglobalrecord.beehiiv.com/subscribe', '_blank');
+    }
+  }}
+  className="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 rounded-xl text-sm transition-colors"
+>
+  Subscribe Free
               </button>
             </div>
             <AdPlaceholder label="Sidebar 300x600" className="h-96 w-full" />
