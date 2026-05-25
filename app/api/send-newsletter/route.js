@@ -184,3 +184,7 @@ export async function POST(request) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
+
+export async function GET(request) {
+  return POST(request);
+}
