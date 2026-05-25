@@ -226,7 +226,7 @@ export default function GlobalRecord() {
             </p>
           </div>
 <button
-  onClick={function() { window.open('https://theglobalrecord.beehiiv.com/subscribe', '_blank'); }}
+  onClick={function() { window.open('http://eepurl.com/VVhhXhkKjj', '_blank'); }}
   className="bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors"
   style={{ fontFamily: "sans-serif" }}
 >
@@ -287,9 +287,9 @@ export default function GlobalRecord() {
   onClick={function() {
     var email = document.getElementById('sidebar-email').value;
     if (email) {
-      window.open('https://theglobalrecord.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank');
+      window.open('http://eepurl.com/VVhhXhkKjj?email=' + encodeURIComponent(email), '_blank');
     } else {
-      window.open('https://theglobalrecord.beehiiv.com/subscribe', '_blank');
+      window.open('http://eepurl.com/VVhhXhkKjj', '_blank');
     }
   }}
   className="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 rounded-xl text-sm transition-colors"
