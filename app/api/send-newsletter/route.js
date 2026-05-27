@@ -163,7 +163,7 @@ export async function POST(request) {
             subject_line: subject,
             title: subject,
             from_name: "The Global Record",
-            reply_to: "rmcgahen@gmail.com",
+            reply_to: "hello@theglobalrecord.com",
           },
         }),
       }
