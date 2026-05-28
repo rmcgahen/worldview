@@ -145,24 +145,23 @@ export default function GlobalRecord() {
   var [loading, setLoading] = useState(true);
   var [newsError, setNewsError] = useState(null);
 
-  useEffect(function() {
-    fetch("/api/news")
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data.error) {
-          setNewsError(data.error);
-        } else if (data.stories && data.stories.length > 0) {
-          setStories(data.stories);
-          localizeStoriesInBackground(data.stories);
-        }
-      })
-      .catch(function() {
-        setNewsError("Could not fetch live news. Showing sample stories.");
-      })
-      .finally(function() {
-        setLoading(false);
-      });
-  }, []);
+useEffect(function() {
+  fetch("/api/news")
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) {
+        setNewsError(data.error);
+      } else if (data.stories && data.stories.length > 0) {
+        setStories(data.stories);
+      }
+    })
+    .catch(function() {
+      setNewsError("Could not fetch live news. Showing sample stories.");
+    })
+    .finally(function() {
+      setLoading(false);
+    });
+}, []);
 
   async function localizeStoriesInBackground(rawStories) {
     for (var i = 0; i < rawStories.length; i++) {
