@@ -66,7 +66,6 @@ function formatDate(dateString) {
 
 function StoryCard({ story }) {
   var loc = story.localized;
-  var isLocalizing = story.localizing;
   var [mounted, setMounted] = useState(false);
 
   useEffect(function() {
@@ -120,12 +119,6 @@ function StoryCard({ story }) {
           <div className="flex-1">
             <h3 className="text-white font-bold text-lg leading-snug mb-3">{story.originalTitle}</h3>
             <p className="text-zinc-400 text-sm leading-relaxed">{story.originalSummary}</p>
-            {isLocalizing && (
-              <div className="flex items-center gap-2 text-orange-400 text-xs mt-3">
-                <span className="animate-spin inline-block">⟳</span>
-                Localizing for American readers...
-              </div>
-            )}
           </div>
         )}
 
