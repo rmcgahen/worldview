@@ -4,6 +4,8 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export async function GET() {
+  console.log("MARKER_SUPABASE_V2");
+  console.log("NEWS ROUTE VERSION: supabase-v2");
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL,
