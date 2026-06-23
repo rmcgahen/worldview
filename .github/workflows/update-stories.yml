@@ -10,4 +10,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger story fetch
-        run: curl -X GET "https://www.theglobalrecord.com/api/save-stories" -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --fail --silent --show-error
+        run: |
+          curl -X GET "https://www.theglobalrecord.com/api/save-stories" -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --fail --silent --show-error
