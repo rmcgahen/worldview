@@ -65,70 +65,54 @@ function formatDate(dateString) {
 }
 
 function StoryCard({ story }) {
-  var loc = story.localized;
   var [mounted, setMounted] = useState(false);
+  useEffect(function() { setMounted(true); }, []);
 
-  useEffect(function() {
-    setMounted(true);
-  }, []);
+  var relevanceParagraphs = story.relevance ? story.relevance.split('\n\n') : [];
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300 group flex flex-col">
-      <div className="relative overflow-hidden h-48 shrink-0">
-        <img
-          src={story.image}
-          alt={story.originalTitle}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={function(e) { e.target.src = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=80"; }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/20 to-transparent" />
-        <div className="absolute top-3 left-3 flex gap-2 items-center">
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300 flex flex-col p-6">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
           <span className="text-xl">{story.countryFlag || "🌍"}</span>
-          <span className="text-xs px-2 py-1 rounded-full bg-zinc-800/80 text-zinc-300 border border-zinc-700">
-            {story.category || "World"}
+          <span className="text-xs text-orange-400 font-semibold uppercase tracking-widest">
+            {story.source}
           </span>
         </div>
-        <div className="absolute bottom-3 right-3 text-xs text-zinc-400">
+        <span className="text-xs text-zinc-500">
           {mounted ? formatDate(story.publishedAt) : ""}
-        </div>
+        </span>
       </div>
 
-      <div className="p-5 flex flex-col flex-1 space-y-3">
-        <div className="text-xs text-orange-400 font-semibold uppercase tracking-widest">
-          {story.source}
+      <h3 className="text-white font-bold text-xl leading-snug mb-4">
+        {story.headline}
+      </h3>
+
+      {relevanceParagraphs.length > 0 ? (
+        <div className="space-y-3 mb-4 flex-1">
+          <div className="text-orange-400 text-xs font-bold uppercase tracking-widest">
+            Why It Matters to Americans
+          </div>
+          {relevanceParagraphs.map(function(para, i) {
+            return (
+              <p key={i} className="text-zinc-300 text-sm leading-relaxed">
+                {para}
+              </p>
+            );
+          })}
         </div>
+      ) : (
+        <p className="text-zinc-400 text-sm leading-relaxed mb-4 flex-1">
+          {story.originalTitle}
+        </p>
+      )}
 
-        {loc ? (
-          <div>
-            <h3 className="text-white font-bold text-lg leading-snug mb-3">{loc.headline}</h3>
-            <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl p-3 mb-3">
-              <div className="text-orange-400 text-xs font-bold uppercase tracking-widest mb-1">
-                🇺🇸 Why It Matters to You
-              </div>
-              <p className="text-zinc-300 text-sm leading-relaxed">{loc.whyItMatters}</p>
-            </div>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-3">{loc.summary}</p>
-            {loc.analogy && (
-              <div className="bg-zinc-800 rounded-xl p-3 mb-3">
-                <span className="text-yellow-400 text-xs font-bold">💡 THINK OF IT THIS WAY: </span>
-                <span className="text-zinc-300 text-xs">{loc.analogy}</span>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex-1">
-            <h3 className="text-white font-bold text-lg leading-snug mb-3">{story.originalTitle}</h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">{story.originalSummary}</p>
-          </div>
-        )}
-
-        {story.url && (
-          <a href={story.url} target="_blank" rel="noopener noreferrer"
-            className="inline-block text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors pt-1">
-            Read Full Story →
-          </a>
-        )}
-      </div>
+      {story.url && (
+        <a href={story.url} target="_blank" rel="noopener noreferrer"
+          className="inline-block text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors mt-auto">
+          Read the full story at {story.source} →
+        </a>
+      )}
     </div>
   );
 }
