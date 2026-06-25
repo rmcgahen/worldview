@@ -89,11 +89,27 @@ function StoryCard({ story }) {
       </h3>
 
       {relevanceParagraphs.length > 0 ? (
-        <div className="space-y-3 mb-4 flex-1">
+        <div className="space-y-3 mb-2 flex-1">
           <div className="text-orange-400 text-xs font-bold uppercase tracking-widest">
             Why It Matters to Americans
           </div>
           {relevanceParagraphs.map(function(para, i) {
+            var isLast = i === relevanceParagraphs.length - 1;
+            if (isLast && story.url && para.lastIndexOf(story.source) !== -1) {
+              var idx = para.lastIndexOf(story.source);
+              var before = para.slice(0, idx);
+              var after = para.slice(idx + story.source.length);
+              return (
+                <p key={i} className="text-zinc-300 text-sm leading-relaxed">
+                  {before}
+                  <a href={story.url} target="_blank" rel="noopener noreferrer"
+                    className="text-orange-400 font-semibold hover:text-orange-300 transition-colors">
+                    {story.source}
+                  </a>
+                  {after}
+                </p>
+              );
+            }
             return (
               <p key={i} className="text-zinc-300 text-sm leading-relaxed">
                 {para}
@@ -105,13 +121,6 @@ function StoryCard({ story }) {
         <p className="text-zinc-400 text-sm leading-relaxed mb-4 flex-1">
           {story.originalTitle}
         </p>
-      )}
-
-      {story.url && (
-        <a href={story.url} target="_blank" rel="noopener noreferrer"
-          className="inline-block text-orange-400 text-sm font-semibold hover:text-orange-300 transition-colors mt-auto">
-          Read the full story at {story.source} →
-        </a>
       )}
     </div>
   );

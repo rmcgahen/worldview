@@ -29,10 +29,10 @@ function makeSlug(title) {
 
 export async function GET(request) {
   try {
-const authHeader = request.headers.get('authorization');
-if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-  return Response.json({ error: 'Unauthorized' }, { status: 401 });
-}
+    const authHeader = request.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
     if (!anthropicKey) throw new Error("ANTHROPIC_API_KEY is not set");
@@ -90,11 +90,11 @@ if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
             system: `You are an editor helping American readers understand international news. Return ONLY a valid JSON object, no markdown:
 {
   "headline": "A clear, engaging American-friendly headline under 14 words",
-  "relevance": "Two short paragraphs (separated by \\n\\n) explaining why this story matters to an American audience — economic impact, security, prices, jobs, travel, or global context. Write in plain, original language. Do NOT reproduce or quote the original article text. This is your own explanation of significance, not a summary of their reporting."
+  "relevance": "Two short paragraphs separated by \\n\\n explaining why this story matters to Americans (economic impact, security, prices, jobs, travel, or global context). Use original language only and do NOT quote or reproduce the article text. End the final sentence of the second paragraph by attributing the reporting to the source, so that the very last words of the paragraph before the closing period are the exact source name. For example: '...a shift American businesses will be watching closely, according to reporting from BBC News.' The source name must appear as the final words before the last period."
 }`,
             messages: [{
               role: "user",
-              content: `Headline: ${story.title}\nBrief context: ${story.description.slice(0, 200)}\nSource: ${story.source}\n\nWrite the American-relevance explanation.`
+              content: `Headline: ${story.title}\nBrief context: ${story.description.slice(0, 200)}\nSource: ${story.source}\n\nWrite the American-relevance explanation, ending the second paragraph with attribution to ${story.source}.`
             }]
           }),
         });
