@@ -7,34 +7,22 @@ const FALLBACK_STORIES = [
     id: 1,
     originalTitle: "Germany passes sweeping AI regulation framework",
     source: "Der Spiegel",
-    countryFlag: "🇩🇪",
-    category: "Tech",
-    originalSummary: "Germany's parliament approved new legislation requiring AI companies to register with federal authorities.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80",
     publishedAt: new Date().toISOString(),
-    localized: null,
+    relevance: null,
   },
   {
     id: 2,
     originalTitle: "Brazil raises interest rates to fight inflation",
     source: "Folha de S.Paulo",
-    countryFlag: "🇧🇷",
-    category: "Economy",
-    originalSummary: "Brazil's central bank raised its benchmark rate to fight persistent inflation.",
-    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80",
     publishedAt: new Date().toISOString(),
-    localized: null,
+    relevance: null,
   },
   {
     id: 3,
     originalTitle: "Japan unveils $40 billion semiconductor investment plan",
     source: "Nikkei Asia",
-    countryFlag: "🇯🇵",
-    category: "Tech",
-    originalSummary: "Tokyo announced a new national fund to subsidize domestic chip manufacturing.",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80",
     publishedAt: new Date().toISOString(),
-    localized: null,
+    relevance: null,
   },
 ];
 
@@ -72,13 +60,7 @@ function StoryCard({ story }) {
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300 flex flex-col p-6">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{story.countryFlag || "🌍"}</span>
-          <span className="text-xs text-orange-400 font-semibold uppercase tracking-widest">
-            {story.source}
-          </span>
-        </div>
+      <div className="flex justify-end mb-3">
         <span className="text-xs text-zinc-500">
           {mounted ? formatDate(story.publishedAt) : ""}
         </span>
@@ -90,9 +72,6 @@ function StoryCard({ story }) {
 
       {relevanceParagraphs.length > 0 ? (
         <div className="space-y-3 mb-2 flex-1">
-          <div className="text-orange-400 text-xs font-bold uppercase tracking-widest">
-            Why It Matters to Americans
-          </div>
           {relevanceParagraphs.map(function(para, i) {
             var isLast = i === relevanceParagraphs.length - 1;
             if (isLast && story.url && para.lastIndexOf(story.source) !== -1) {
@@ -131,67 +110,23 @@ export default function GlobalRecord() {
   var [loading, setLoading] = useState(true);
   var [newsError, setNewsError] = useState(null);
 
-useEffect(function() {
-  fetch("/api/news")
-    .then(function(res) { return res.json(); })
-    .then(function(data) {
-      if (data.error) {
-        setNewsError(data.error);
-      } else if (data.stories && data.stories.length > 0) {
-        setStories(data.stories);
-      }
-    })
-    .catch(function() {
-      setNewsError("Could not fetch live news. Showing sample stories.");
-    })
-    .finally(function() {
-      setLoading(false);
-    });
-}, []);
-
-  async function localizeStoriesInBackground(rawStories) {
-    for (var i = 0; i < rawStories.length; i++) {
-      var story = rawStories[i];
-
-      setStories(function(prev) {
-        return prev.map(function(s, idx) {
-          return idx === i ? Object.assign({}, s, { localizing: true }) : s;
-        });
-      });
-
-      try {
-        await new Promise(function(resolve) { setTimeout(resolve, 300); });
-
-        var res = await fetch("/api/localize", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: story.originalTitle,
-            summary: story.originalSummary,
-            source: story.source,
-          }),
-        });
-
-        var localized = await res.json();
-
-        if (!localized.error) {
-          var capturedIndex = i;
-          setStories(function(prev) {
-            return prev.map(function(s, idx) {
-              return idx === capturedIndex ? Object.assign({}, s, { localized: localized, localizing: false }) : s;
-            });
-          });
+  useEffect(function() {
+    fetch("/api/news")
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) {
+          setNewsError(data.error);
+        } else if (data.stories && data.stories.length > 0) {
+          setStories(data.stories);
         }
-      } catch (err) {
-        var capturedIndex2 = i;
-        setStories(function(prev) {
-          return prev.map(function(s, idx) {
-            return idx === capturedIndex2 ? Object.assign({}, s, { localizing: false }) : s;
-          });
-        });
-      }
-    }
-  }
+      })
+      .catch(function() {
+        setNewsError("Could not fetch live news. Showing sample stories.");
+      })
+      .finally(function() {
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <div style={{ fontFamily: "Georgia, 'Times New Roman', serif" }} className="min-h-screen bg-zinc-950 text-white">
@@ -210,12 +145,12 @@ useEffect(function() {
               The World — Explained for You
             </p>
           </div>
-<button
-  onClick={function() { window.open('http://eepurl.com/VVhhXhkKjj', '_blank'); }}
-  className="bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors"
-  style={{ fontFamily: "sans-serif" }}
->
-  Subscribe Free
+          <button
+            onClick={function() { window.open('http://eepurl.com/VVhhXhkKjj', '_blank'); }}
+            className="bg-orange-500 hover:bg-orange-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors"
+            style={{ fontFamily: "sans-serif" }}
+          >
+            Subscribe Free
           </button>
         </div>
       </header>
@@ -234,12 +169,11 @@ useEffect(function() {
                 {[1, 2, 3, 4, 5, 6].map(function(i) {
                   return (
                     <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden">
-                      <div className="h-48 bg-zinc-800 animate-pulse" />
-                      <div className="p-5 space-y-3">
-                        <div className="h-3 bg-zinc-800 animate-pulse rounded w-1/3" />
-                        <div className="h-5 bg-zinc-800 animate-pulse rounded w-full" />
-                        <div className="h-5 bg-zinc-800 animate-pulse rounded w-4/5" />
-                        <div className="h-16 bg-zinc-800 animate-pulse rounded" />
+                      <div className="p-6 space-y-3">
+                        <div className="h-3 bg-zinc-800 animate-pulse rounded w-1/4 ml-auto" />
+                        <div className="h-6 bg-zinc-800 animate-pulse rounded w-full" />
+                        <div className="h-4 bg-zinc-800 animate-pulse rounded w-full" />
+                        <div className="h-4 bg-zinc-800 animate-pulse rounded w-5/6" />
                       </div>
                     </div>
                   );
@@ -263,23 +197,23 @@ useEffect(function() {
               <h3 className="text-white font-bold mb-2">📬 Daily Brief</h3>
               <p className="text-zinc-400 text-sm mb-4">The world's top stories explained for Americans — every morning.</p>
               <input
-             id="sidebar-email"
-  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-300 placeholder-zinc-600 mb-3 focus:outline-none focus:border-orange-500"
-  placeholder="your@email.com"
-  type="email"
-/>
-<button
-  onClick={function() {
-    var email = document.getElementById('sidebar-email').value;
-    if (email) {
-      window.open('http://eepurl.com/VVhhXhkKjj?email=' + encodeURIComponent(email), '_blank');
-    } else {
-      window.open('http://eepurl.com/VVhhXhkKjj', '_blank');
-    }
-  }}
-  className="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 rounded-xl text-sm transition-colors"
->
-  Subscribe Free
+                id="sidebar-email"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-300 placeholder-zinc-600 mb-3 focus:outline-none focus:border-orange-500"
+                placeholder="your@email.com"
+                type="email"
+              />
+              <button
+                onClick={function() {
+                  var email = document.getElementById('sidebar-email').value;
+                  if (email) {
+                    window.open('http://eepurl.com/VVhhXhkKjj?email=' + encodeURIComponent(email), '_blank');
+                  } else {
+                    window.open('http://eepurl.com/VVhhXhkKjj', '_blank');
+                  }
+                }}
+                className="w-full bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 rounded-xl text-sm transition-colors"
+              >
+                Subscribe Free
               </button>
             </div>
             <AdPlaceholder label="Sidebar 300x600" className="h-96 w-full" />
@@ -290,14 +224,14 @@ useEffect(function() {
       <footer className="border-t border-zinc-800 px-6 py-8 mt-8">
         <div className="max-w-6xl mx-auto">
           <AdPlaceholder label="Footer Banner — Google AdSense 728x90" className="h-14 w-full mb-6" />
-<div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-zinc-600 text-xs" style={{ fontFamily: "sans-serif" }}>
-  <span>The Global Record © 2026 — International News for Americans</span>
-  <div className="flex gap-4">
-    <a href="/about" className="hover:text-zinc-400 transition-colors">About</a>
-    <a href="/contact" className="hover:text-zinc-400 transition-colors">Contact</a>
-    <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy Policy</a>
-  </div>
-</div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-zinc-600 text-xs" style={{ fontFamily: "sans-serif" }}>
+            <span>The Global Record © 2026 — International News for Americans</span>
+            <div className="flex gap-4">
+              <a href="/about" className="hover:text-zinc-400 transition-colors">About</a>
+              <a href="/contact" className="hover:text-zinc-400 transition-colors">Contact</a>
+              <a href="/privacy" className="hover:text-zinc-400 transition-colors">Privacy Policy</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
