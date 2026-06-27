@@ -4,18 +4,30 @@ import { createClient } from '@supabase/supabase-js';
 export const dynamic = 'force-dynamic'
 
 const RSS_FEEDS = [
+  // Europe
   { url: 'http://feeds.bbci.co.uk/news/world/rss.xml', source: 'BBC News', flag: '🇬🇧' },
-  { url: 'https://www.aljazeera.com/xml/rss/all.xml', source: 'Al Jazeera', flag: '🌍' },
   { url: 'https://www.theguardian.com/world/rss', source: 'The Guardian', flag: '🇬🇧' },
   { url: 'https://feeds.france24.com/rss/en/news', source: 'France 24', flag: '🇫🇷' },
   { url: 'https://rss.dw.com/rdf/rss-en-all', source: 'Deutsche Welle', flag: '🇩🇪' },
+  // Middle East / global
+  { url: 'https://www.aljazeera.com/xml/rss/all.xml', source: 'Al Jazeera', flag: '🌍' },
+  // Asia
   { url: 'https://www3.nhk.or.jp/rj/podcast/rss/english.xml', source: 'NHK World', flag: '🇯🇵' },
   { url: 'https://www.straitstimes.com/news/world/rss.xml', source: 'The Straits Times', flag: '🇸🇬' },
   { url: 'https://www.thehindu.com/news/international/feeder/default.rss', source: 'The Hindu', flag: '🇮🇳' },
-  { url: 'https://www.cbc.ca/webfeed/rss/rss-world', source: 'CBC News', flag: '🇨🇦' },
+  // North America (Canada)
+  { url: 'http://rss.cbc.ca/lineup/world.xml', source: 'CBC News', flag: '🇨🇦' },
+  // Oceania
   { url: 'https://www.abc.net.au/news/feed/51120/rss.xml', source: 'ABC Australia', flag: '🇦🇺' },
+  { url: 'https://www.rnz.co.nz/rss/world.xml', source: 'RNZ', flag: '🇳🇿' },
+  // Latin America
   { url: 'https://en.mercopress.com/rss/', source: 'MercoPress', flag: '🌎' },
   { url: 'https://www.batimes.com.ar/feed', source: 'Buenos Aires Times', flag: '🇦🇷' },
+  { url: 'https://riotimesonline.com/feed/', source: 'The Rio Times', flag: '🇧🇷' },
+  // Africa
+  { url: 'https://allafrica.com/tools/headlines/rdf/latest/headlines.rdf', source: 'AllAfrica', flag: '🌍' },
+  { url: 'https://www.africanews.com/feed/rss', source: 'Africanews', flag: '🌍' },
+  { url: 'http://feeds.bbci.co.uk/news/world/africa/rss.xml', source: 'BBC Africa', flag: '🌍' },
 ];
 
 const US_DOMESTIC_KEYWORDS = [
@@ -82,7 +94,7 @@ export async function GET(request) {
         return true;
       })
       .sort(function(a, b) { return new Date(b.publishedAt) - new Date(a.publishedAt); })
-      .slice(0, 24);
+      .slice(0, 30);
 
     let savedCount = 0;
     let skippedCount = 0;
