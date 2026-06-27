@@ -18,6 +18,19 @@ const RSS_FEEDS = [
   { url: 'https://www.batimes.com.ar/feed', source: 'Buenos Aires Times', flag: '🇦🇷' },
 ];
 
+const US_DOMESTIC_KEYWORDS = [
+  'congress', 'senate', 'house republican', 'house democrat', 'white house',
+  'supreme court', 'scotus', 'capitol hill', 'nascar', 'nfl', 'nba', 'mlb',
+  'super bowl', 'governor', 'state legislature', 'medicaid', 'medicare',
+  'social security', 'irs', 'fbi', 'ice raid', 'border patrol',
+];
+
+function isLikelyUSDomestic(title, description) {
+  const text = (title + ' ' + description).toLowerCase();
+  const matches = US_DOMESTIC_KEYWORDS.filter(function(k) { return text.includes(k); });
+  return matches.length >= 2;
+}
+
 function makeSlug(title) {
   return title
     .toLowerCase()
@@ -63,9 +76,13 @@ export async function GET(request) {
     });
 
     const candidates = allStories
-      .filter(function(s) { return s.title && s.description && s.description.length > 20 && s.url; })
+      .filter(function(s) {
+        if (!s.title || !s.description || s.description.length <= 20 || !s.url) return false;
+        if (isLikelyUSDomestic(s.title, s.description)) return false;
+        return true;
+      })
       .sort(function(a, b) { return new Date(b.publishedAt) - new Date(a.publishedAt); })
-      .slice(0, 18);
+      .slice(0, 24);
 
     let savedCount = 0;
     let skippedCount = 0;
@@ -76,6 +93,7 @@ export async function GET(request) {
 
       let headline = story.title;
       let relevance = null;
+      let shouldSkip = false;
       try {
         const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
@@ -87,14 +105,15 @@ export async function GET(request) {
           body: JSON.stringify({
             model: "claude-sonnet-4-6",
             max_tokens: 600,
-            system: `You are an editor helping American readers understand international news. Return ONLY a valid JSON object, no markdown:
+            system: `You are an editor for an international news site written for American readers. The site covers what is happening OUTSIDE the United States. Return ONLY a valid JSON object, no markdown:
 {
+  "skip": true or false. Set to true ONLY if this story is primarily about United States DOMESTIC affairs (US politics, US elections, US courts, US sports, US local crime, US celebrities). Set to false if it is about another country, or about international or global affairs even when the US is involved (foreign policy, trade, war, diplomacy, global economy).,
   "headline": "A clear, engaging American-friendly headline under 14 words",
   "relevance": "Two short paragraphs separated by \\n\\n explaining why this story matters to Americans (economic impact, security, prices, jobs, travel, or global context). Use original language only and do NOT quote or reproduce the article text. End the final sentence of the second paragraph by attributing the reporting to the source, so that the very last words of the paragraph before the closing period are the exact source name. For example: '...a shift American businesses will be watching closely, according to reporting from BBC News.' The source name must appear as the final words before the last period."
 }`,
             messages: [{
               role: "user",
-              content: `Headline: ${story.title}\nBrief context: ${story.description.slice(0, 200)}\nSource: ${story.source}\n\nWrite the American-relevance explanation, ending the second paragraph with attribution to ${story.source}.`
+              content: `Headline: ${story.title}\nBrief context: ${story.description.slice(0, 200)}\nSource: ${story.source}\n\nJudge whether this is US-domestic, then write the American-relevance explanation, ending the second paragraph with attribution to ${story.source}.`
             }]
           }),
         });
@@ -102,10 +121,18 @@ export async function GET(request) {
         const text = aiData.content.map(function(i) { return i.text || ""; }).join("");
         const clean = text.replace(/```json|```/g, "").trim();
         const parsed = JSON.parse(clean);
+        if (parsed.skip === true) {
+          shouldSkip = true;
+        }
         headline = parsed.headline || story.title;
         relevance = parsed.relevance || null;
       } catch (err) {
         console.log("Claude failed for:", story.title, err.message);
+      }
+
+      if (shouldSkip) {
+        skippedCount++;
+        continue;
       }
 
       const slug = makeSlug(story.title) + '-' + Date.now().toString().slice(-5);
